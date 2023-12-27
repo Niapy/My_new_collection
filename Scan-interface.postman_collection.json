@@ -1,0 +1,322 @@
+{
+	"info": {
+		"_postman_id": "55b0a760-9419-4a92-b3c5-a31b0b0c30b7",
+		"name": "Scan-interface",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30015285"
+	},
+	"item": [
+		{
+			"name": "Authorization",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200.\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Токен получен и записан в переменные.\", function () {\r",
+							"        let jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData).to.have.any.keys('accessToken');\r",
+							"        pm.collectionVariables.set(\"test_auth\", jsonData.accessToken);\r",
+							"});\r",
+							"if(pm.response.code === 401) {\r",
+							"    postman.setNextRequest(null)\r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"login\": \"{{test_login}}\",\r\n  \"password\": \"{{test_password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/account/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"account",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Current_balance",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200.\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Текущийбаланс получен и записан в переменные.\", function () {\r",
+							"        let jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData).to.have.any.keys('balance');\r",
+							"        pm.collectionVariables.set(\"current_balance\", jsonData.balance);\r",
+							"});\r",
+							" \r",
+							"\r",
+							" "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/account/balance",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"account",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recieve_publication_topic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200.\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Заголовки (1-2-3) получены и записан в переменные а также получено общее количество заголовков.\", function () {\r",
+							"        let jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData.subjects[0]).to.have.any.keys('name');\r",
+							"        pm.expect(jsonData.subjects[1]).to.have.any.keys('name');\r",
+							"        pm.expect(jsonData.subjects[2]).to.have.any.keys('name');\r",
+							"        pm.expect(jsonData).to.have.any.keys('totalCount');\r",
+							"        pm.collectionVariables.set(\"subjects_name1\", jsonData.subjects[0].name);\r",
+							"        pm.collectionVariables.set(\"subjects_name2\", jsonData.subjects[1].name);\r",
+							"        pm.collectionVariables.set(\"subjects_name3\", jsonData.subjects[2].name);\r",
+							"        pm.collectionVariables.set(\"subjects_total\", jsonData.totalCount);\r",
+							"});\r",
+							" "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/entities/subjects?index=0&pageSize=5",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"entities",
+						"subjects"
+					],
+					"query": [
+						{
+							"key": "index",
+							"value": "0"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recieve docs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200.\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Новостные ресурсы получены и записаны в переменные.\", function () {\r",
+							"        let jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData[0].ok.source).to.have.any.keys('name');\r",
+							"        pm.expect(jsonData[1].ok.source).to.have.any.keys('name');\r",
+							"        pm.collectionVariables.set(\"news_agent_1\", jsonData[0].ok.source.name);\r",
+							"        pm.collectionVariables.set(\"news_agent_2\", jsonData[1].ok.source.name);\r",
+							"});\r",
+							" \r",
+							" "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"ids\": [\r\n    \"{{ids_1}}\", \r\n    \"{{ids_2}}\"\r\n  ]\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/documents",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"documents"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{test_auth}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://gateway.scan-interfax.ru",
+			"type": "string"
+		},
+		{
+			"key": "test_auth",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "test_login",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "test_password",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "current_balance",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "subjects_name1",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "subjects_name2",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "subjects_name3",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "subjects_total",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "ids_1",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "ids_2",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "news_agent_1",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "news_agent_2",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
